@@ -1,9 +1,8 @@
 import express, { response } from "express"
-import dotenv from "dotenv"
-dotenv.config()
 import crawler from "./crawler.js"
 
 const app = express();
+const PORT = 8000;
 
 // /node/api?q={param}
 app.use("/node", (req, res) => {
@@ -25,6 +24,6 @@ app.use("/", (req, res) => {
      )
 })
 
-app.listen(process.env.PORT, ()=> {
+app.listen(PORT, ()=> {
     console.log("http://localhost:" + process.env.PORT + "가 실행되었습니다.")
 })
