@@ -13,7 +13,7 @@ app.use("/node", async (req, res) => {
         const reuslt = await crawler(param)
         res.status(200).json(reuslt)
     } catch (error) {
-        res.status(404).send("404 not found")
+        res.status(404).send("404 not found" +error)
     }
 
 })
