@@ -1,11 +1,10 @@
 import puppeteer from "puppeteer-extra";
 import {executablePath} from "puppeteer";
 import stealth from "puppeteer-extra-plugin-stealth"
-//import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
 puppeteer.use(stealth())
 async function init(param){
-    try {
+ 
     const browser = await puppeteer.launch({headless: false, executablePath : executablePath()});
     browser.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
     const page = await browser.newPage()
@@ -116,23 +115,18 @@ async function init(param){
     
     ]
 
-
     //page.on("load", e =>{} );
     //page.waitForSelector 최대 대기시간
     //page.setDefaultTimeout(15000)
     await page.goto(`https://www.arrow.com/`,{ waitUntil: "domcontentloaded"})
-    // const getCookie = await page.cookies();
     // const cookiee = JSON.stringify(getCookie);
-    // console.log(cookiee);
-   
-    //await page.setCookie(...cookie);
+    await page.waitForTimeout(3000);
     await page.goto(`https://www.arrow.com/en/products/search?cate=&r=true&q=${param}`,{ "waitUntil": "domcontentloaded"})
-    await page.screenshot({path:"./screenshot.png"})
-    await page.evaluate((partnumber) => {
-        document.querySelector("input[name='q']").value = partnumber
-    }, [param])
-
-    await page.click(".Embedded-search-button")
+    //await page.screenshot({path:"./screenshot.png"})
+    // await page.evaluate((partnumber) => {
+    //     document.querySelector("input[name='q']").value = partnumber
+    // }, [param])
+    // await page.click(".Embedded-search-button")
 
     const result = await page.evaluate((partnumber) => {
         if(document.querySelector(".SearchResults-results .SearchResults-resultRow")){
@@ -146,12 +140,10 @@ async function init(param){
         return {res: "yepp"}
 
     }, [param])
+    await page.screenshot({path:"./screenshot.png"})
+    await page.close()
+    await browser.close()
 
-    // await page.close()
-    // await browser.close()
-    }catch(err){
-        console.log(err);
-    }
     return result
 
 }
